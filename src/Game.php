@@ -24,8 +24,8 @@ final Class Game
     public function __construct(int $numberOfParty, int $numberOfCards, array $players)
     {
         $this->numberOfParty = $numberOfParty;
-        $this->numberOfCards = $numberOfCards;
         $this->players = $players;
+        $this->numberOfCards = $numberOfCards;
         $this->gameRanking = [];
         $this->initGameRanking();
     }
@@ -67,11 +67,12 @@ final Class Game
     
     private function validateNumberOfCards(int $value): int
     {
-        if ($value < count($this->players)) {
+        $countPlayers = count($this->players);
+        if ($value < $countPlayers) {
             throw new \InvalidArgumentException('Le nombre de cartes doit être au moins égal au nombre de joueurs');
         }
-        if ($value % 2 !== 0 ) {
-            throw new \InvalidArgumentException('Le nombre de cartes doit être pair.');
+        if ($value % $countPlayers !== 0 ) {
+            throw new \InvalidArgumentException('Le nombre de cartes doit être un multiple du nombre de joueurs.');
         }
         return $value;
     }
