@@ -61,4 +61,15 @@ final class GameTest extends TestCase
         $this->assertArrayHasKey('player', $ranking[0]);
         $this->assertArrayHasKey('score', $ranking[0]);
     }
+
+    public function testResetScore(): void
+    {
+        $player1 = $this->createMock(Player::class);
+        $player2 = $this->createMock(Player::class);
+        $players = [$player1, $player2];
+        $game = new Game(3, 52, $players);
+        $player1->expects($this->exactly(3))->method('resetScore');
+        $player2->expects($this->exactly(3))->method('resetScore');
+        $game->play();
+    }
 }

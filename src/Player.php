@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Bataille;
 
-final class Player
+class Player
 {
     private array $cards = [];
 
@@ -37,6 +37,11 @@ final class Player
         return !empty($this->cards);
     }
     
+    public function resetScore(): void
+    {
+        $this->score = 0;
+    }
+
     public function playCard(): Card
     {
         if(!$this->hasCards()) {

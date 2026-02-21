@@ -33,6 +33,9 @@ final Class Game
     public function play(): Game
     {
         for ($i = 0; $i < $this->numberOfParty; $i++) {
+            foreach ($this->players as $player) {
+                $player->resetScore();
+            }
             $party = new Party($this);
             $party->play();
             $winner = $party->getWinner();
