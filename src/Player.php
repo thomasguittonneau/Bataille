@@ -22,6 +22,29 @@ final class Player
         $this->score = 0;
     }
 
+    public function addPoint(): void
+    {
+        $this->score++;
+    }
+
+    public function addCards(array $cards): void
+    {
+        $this->cards = array_merge($this->cards, $cards);
+    }
+
+    public function hasCards(): bool
+    {
+        return !empty($this->cards);
+    }
+    
+    public function playCard(): Card
+    {
+        if(!$this->hasCards()) {
+            throw new \RuntimeException('Le joueur n\'a plus de cartes à jouer.');
+        }   
+        return array_pop($this->cards);
+    }
+
     private function validateName(string $name): string
     {
         if (empty($name)) {

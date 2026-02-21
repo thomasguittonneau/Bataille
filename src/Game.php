@@ -7,24 +7,51 @@ final Class Game
 {
     public int $numberOfParty {
         get => $this->numberOfParty;
-        set => $this->validateNumberOfParty($numberOfParty);
+        set => $this->validateNumberOfParty($value);
     }
 
     public int $numberOfCards {
         get => $this->numberOfCards;
-        set => $this->validateNumberOfCards($numberOfCards);
+        set => $this->validateNumberOfCards($value);
     }
 
-    public int $numberOfPlayers {
-        get => $this->numberOfPlayers;
-        set => $this->validateNumberOfPlayers($numberOfPlayers);
+    public array $players {
+        get => $this->players;
     }
 
-    public function __construct(int $numberOfParty, int $numberOfCards, int $numberOfPlayers)
+    private array $gameRanking;
+
+    public function __construct(int $numberOfParty, int $numberOfCards, array $players)
     {
         $this->numberOfParty = $numberOfParty;
         $this->numberOfCards = $numberOfCards;
-        $this->numberOfPlayers = $numberOfPlayers;
+        $this->players = $players;
+        $this->gameRanking = [];
+        $this->initGameRanking();
+    }
+
+    public function play(): Game
+    {
+        for ($i = 0; $i < $this->numberOfParty; $i++) {
+            $party = new Party($this);
+            $party->play();
+            $winner = $party->getWinner();
+            $this->gameRanking[array_search($winner, $this->players)]['score']++;
+        }
+        usort($this->gameRanking, fn($a, $b) => $b['score'] <=> $a['score']);
+        return $this;
+    }
+    
+    public function getGameRanking(): array
+    {
+        return $this->gameRanking;
+    }
+
+    private function initGameRanking(): void
+    {
+        foreach ($this->players as $player) {
+            $this->gameRanking[] = ['player' => $player->name, 'score' => 0];
+        }
     }
 
     private function validateNumberOfParty(int $value): int
@@ -42,14 +69,6 @@ final Class Game
     {
         if ($value < 1 || $value % 2 !== 0) {
             throw new \InvalidArgumentException('Le nombre de cartes doit être au moins de 1 et pair.');
-        }
-        return $value;
-    }
-    
-    private function validateNumberOfPlayers(int $value): int
-    {
-        if ($value < 1 || $value % 2 !== 0) {
-            throw new \InvalidArgumentException('Le nombre de joueurs doit être au moins de 1 et pair.');
         }
         return $value;
     }
