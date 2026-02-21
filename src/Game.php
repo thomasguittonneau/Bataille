@@ -41,7 +41,7 @@ final Class Game
         usort($this->gameRanking, fn($a, $b) => $b['score'] <=> $a['score']);
         return $this;
     }
-    
+
     public function getGameRanking(): array
     {
         return $this->gameRanking;
@@ -67,8 +67,11 @@ final Class Game
     
     private function validateNumberOfCards(int $value): int
     {
-        if ($value < 1 || $value % 2 !== 0) {
-            throw new \InvalidArgumentException('Le nombre de cartes doit être au moins de 1 et pair.');
+        if ($value < count($this->players)) {
+            throw new \InvalidArgumentException('Le nombre de cartes doit être au moins égal au nombre de joueurs');
+        }
+        if ($value % 2 !== 0 ) {
+            throw new \InvalidArgumentException('Le nombre de cartes doit être pair.');
         }
         return $value;
     }
