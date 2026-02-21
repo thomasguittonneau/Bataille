@@ -47,8 +47,11 @@ final class Player
 
     private function validateName(string $name): string
     {
-        if (empty($name)) {
+        if (trim($name) === '') {
             throw new \InvalidArgumentException('Le nom du joueur ne peut pas être vide.');
+        }
+        if (strlen($name) > 50) {
+            throw new \InvalidArgumentException('Le nom du joueur ne peut pas dépasser 50 caractères.');
         }
         return $name;
     }
